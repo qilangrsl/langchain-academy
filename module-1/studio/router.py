@@ -1,3 +1,4 @@
+import os
 from langchain_openai import ChatOpenAI
 from langgraph.graph import MessagesState
 from langgraph.graph import StateGraph, START, END
@@ -14,7 +15,11 @@ def multiply(a: int, b: int) -> int:
     return a * b
 
 # LLM with bound tool
-llm = ChatOpenAI(model="gpt-4o")
+llm = ChatOpenAI(
+    model=os.getenv("SENSENOVA_CHAT_MODEL", "sensenova-6.8-flash-lite"),
+    api_key=os.getenv("SENSENOVA_API_KEY"),
+    base_url=os.getenv("SENSENOVA_BASE_URL"),
+)
 llm_with_tools = llm.bind_tools([multiply])
 
 # Node

@@ -11,6 +11,7 @@ from langchain_core.runnables import RunnableConfig
 from langchain_core.messages import merge_message_runs
 from langchain_core.messages import SystemMessage, HumanMessage
 
+import os
 from langchain_openai import ChatOpenAI
 
 from langgraph.checkpoint.memory import MemorySaver
@@ -138,7 +139,12 @@ class UpdateMemory(TypedDict):
     update_type: Literal['user', 'todo', 'instructions']
 
 # Initialize the model
-model = ChatOpenAI(model="gpt-4o", temperature=0)
+model = ChatOpenAI(
+    model=os.getenv("SENSENOVA_CHAT_MODEL", "sensenova-6.8-flash-lite"),
+    temperature=0,
+    api_key=os.getenv("SENSENOVA_API_KEY"),
+    base_url=os.getenv("SENSENOVA_BASE_URL"),
+)
 
 ## Create the Trustcall extractors for updating the user profile and ToDo list
 profile_extractor = create_extractor(

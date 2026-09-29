@@ -4,6 +4,7 @@ from typing_extensions import TypedDict
 
 from pydantic import BaseModel
 
+import os
 from langchain_openai import ChatOpenAI 
 
 from langgraph.constants import Send
@@ -15,7 +16,12 @@ joke_prompt = """Generate a joke about {subject}"""
 best_joke_prompt = """Below are a bunch of jokes about {topic}. Select the best one! Return the ID of the best one, starting 0 as the ID for the first joke. Jokes: \n\n  {jokes}"""
 
 # LLM
-model = ChatOpenAI(model="gpt-4o", temperature=0) 
+model = ChatOpenAI(
+    model=os.getenv("SENSENOVA_CHAT_MODEL", "sensenova-6.8-flash-lite"),
+    temperature=0,
+    api_key=os.getenv("SENSENOVA_API_KEY"),
+    base_url=os.getenv("SENSENOVA_BASE_URL"),
+)
 
 # Define the state
 class Subjects(BaseModel):

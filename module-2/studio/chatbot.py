@@ -4,8 +4,14 @@ from langgraph.graph import MessagesState
 from langgraph.graph import StateGraph, START, END
 
 # We will use this model for both the conversation and the summarization
+import os
 from langchain_openai import ChatOpenAI
-model = ChatOpenAI(model="gpt-4o", temperature=0) 
+model = ChatOpenAI(
+    model=os.getenv("SENSENOVA_CHAT_MODEL", "sensenova-6.8-flash-lite"),
+    temperature=0,
+    api_key=os.getenv("SENSENOVA_API_KEY"),
+    base_url=os.getenv("SENSENOVA_BASE_URL"),
+)
 
 # State class to store messages and summary
 class State(MessagesState):

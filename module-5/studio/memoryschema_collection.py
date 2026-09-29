@@ -7,13 +7,19 @@ from trustcall import create_extractor
 from langchain_core.messages import SystemMessage
 from langchain_core.messages import merge_message_runs
 from langchain_core.runnables.config import RunnableConfig
+import os
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph.store.base import BaseStore
 import configuration
 
 # Initialize the LLM
-model = ChatOpenAI(model="gpt-4o", temperature=0) 
+model = ChatOpenAI(
+    model=os.getenv("SENSENOVA_CHAT_MODEL", "sensenova-6.8-flash-lite"),
+    temperature=0,
+    api_key=os.getenv("SENSENOVA_API_KEY"),
+    base_url=os.getenv("SENSENOVA_BASE_URL"),
+)
 
 # Memory schema
 class Memory(BaseModel):

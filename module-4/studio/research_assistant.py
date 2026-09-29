@@ -6,6 +6,7 @@ from typing_extensions import TypedDict
 from langchain_community.document_loaders import WikipediaLoader
 from langchain_tavily import TavilySearch  # updated 1.0
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, get_buffer_string
+import os
 from langchain_openai import ChatOpenAI
 
 from langgraph.constants import Send
@@ -13,7 +14,12 @@ from langgraph.graph import END, MessagesState, START, StateGraph
 
 ### LLM
 
-llm = ChatOpenAI(model="gpt-4o", temperature=0) 
+llm = ChatOpenAI(
+    model=os.getenv("SENSENOVA_CHAT_MODEL", "sensenova-6.8-flash-lite"),
+    temperature=0,
+    api_key=os.getenv("SENSENOVA_API_KEY"),
+    base_url=os.getenv("SENSENOVA_BASE_URL"),
+)
 
 ### Schema 
 
